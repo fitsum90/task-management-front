@@ -32,11 +32,8 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
       // Check if the error is related to file size exceeding 1MB
       if (error.response && error.response.data && error.response.data.error) {
         const errorMessage = error.response.data.error;
-        console.log("====================================");
-        console.log(errorMessage);
-        console.log("====================================");
-        if (errorMessage.includes("File size exceeds 1MB")) {
-          toast.error("File size exceeds 1MB");
+        if (errorMessage.includes("File size exceeds 2MB")) {
+          toast.error("File size exceeds 2MB");
         } else {
           toast.error(errorMessage || "An error occurred");
         }
