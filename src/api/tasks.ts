@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = "https://db.classytechsolution.com/api";
 
 export interface StatusHistory {
   status: "TO_DO" | "IN_PROGRESS" | "DONE";

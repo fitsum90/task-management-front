@@ -1,6 +1,6 @@
 import React from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { X, Upload, Loader2 } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
 import { createTask } from "../api/tasks";
 import { ToastContainer, toast } from "react-toastify"; // Importing ToastContainer and toast
 import FileDropzone from "./FileDropzone";
@@ -28,6 +28,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
       setDescription("");
       setFile(null);
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       // Check if the error is related to file size exceeding 1MB
       if (error.response && error.response.data && error.response.data.error) {

@@ -15,6 +15,9 @@ interface TaskBoardProps {
   statusFilter: string;
 }
 
+// Define a type for possible task statuses
+type TaskStatus = "TO_DO" | "IN_PROGRESS" | "DONE";
+
 const TaskBoard: React.FC<TaskBoardProps> = ({ searchQuery, statusFilter }) => {
   const { data: tasks, isLoading } = useQuery({
     queryKey: ["tasks"],
@@ -34,7 +37,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ searchQuery, statusFilter }) => {
 
     // Remove 'task-' prefix to get the actual task ID
     const taskId = result.draggableId.replace("task-", "");
-    const newStatus = result.destination.droppableId as Task["status"];
+    const newStatus = result.destination.droppableId as TaskStatus; // Cast to TaskStatus
     const task = tasks?.find((t) => t._id === taskId);
 
     if (task && task.status !== newStatus) {
@@ -70,20 +73,20 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ searchQuery, statusFilter }) => {
     );
   }
 
-  const columns = {
+  const columns: Record<TaskStatus, Task[]> = {
     TO_DO: filteredTasks?.filter((task) => task.status === "TO_DO") || [],
     IN_PROGRESS:
       filteredTasks?.filter((task) => task.status === "IN_PROGRESS") || [],
     DONE: filteredTasks?.filter((task) => task.status === "DONE") || [],
   };
 
-  const columnStyles = {
+  const columnStyles: Record<TaskStatus, string> = {
     TO_DO: "bg-red-50 border-red-200",
     IN_PROGRESS: "bg-yellow-50 border-yellow-200",
     DONE: "bg-green-50 border-green-200",
   };
 
-  const statusColors = {
+  const statusColors: Record<TaskStatus, string> = {
     TO_DO: "text-red-600 bg-red-50",
     IN_PROGRESS: "text-yellow-600 bg-yellow-50",
     DONE: "text-green-600 bg-green-50",
@@ -96,7 +99,9 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ searchQuery, statusFilter }) => {
           {Object.entries(columns).map(([status, tasks]) => (
             <div
               key={status}
-              className={`rounded-lg border ${columnStyles[status]} p-4 shadow-sm`}
+              className={`rounded-lg border ${
+                columnStyles[status as TaskStatus]
+              } p-4 shadow-sm`}
             >
               <h2 className="text-lg font-semibold mb-4 flex items-center">
                 <Tag className="w-5 h-5 mr-2" />
@@ -145,7 +150,7 @@ const TaskBoard: React.FC<TaskBoardProps> = ({ searchQuery, statusFilter }) => {
                                   )}
                                   <span
                                     className={`text-xs px-2 py-1 rounded-full ${
-                                      statusColors[task.status]
+                                      statusColors[task.status as TaskStatus]
                                     }`}
                                   >
                                     {task.status.replace("_", " ")}
